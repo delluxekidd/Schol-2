@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        // gcc debug
+        {
+            "type": "cppdbg",
+            "request": "launch",
+            "name": "gcc debug",
+            "program": "${workspaceFolder}/PF2 HW/PF2 HW 1/bin/pf2_hw_one",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd":  "${workspaceFolder}/PF2 HW/PF2 HW 1/bin/pf2_hw_one",
+            "environment": [],
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+    ]
+
+}
