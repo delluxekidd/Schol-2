@@ -28,10 +28,10 @@ LIB_NAMES :=
 LIB_FLAGS := $(addprefix -L,$(LIB_DIRS))
 
 # Flags
-ALL_FLAGS := -O2 -Wall -Wextra -Wpedantic -Wabi
+ALL_FLAGS := -O2 -Wall -Wextra -Wpedantic  -g
 AS_FLAGS ?=
 C_FLAGS ?=
-CXX_FLAGS ?= -std=c++98
+CXX_FLAGS ?= -std=c++17
 LD_FLAGS ?=
 
 # Target
