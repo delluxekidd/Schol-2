@@ -1,5 +1,6 @@
 #include "review.h"
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 //Default Constructor
@@ -100,6 +101,6 @@ void Review::print() const
     cout << "Reviewer: " << reviewer << endl;
     cout << "Restaurant: " << restaurant << endl;
     cout << "Food: " << food << endl;
-    cout << "Cost: " << cost << endl;
+    cout << setprecision(2) << "Cost: " << cost << endl;
     cout << "Rating: " << rating << endl;
 }

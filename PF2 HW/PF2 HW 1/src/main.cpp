@@ -1,3 +1,7 @@
+#define MAX_RESTAURANT_LEN 40
+#define MAX_FOOD_LEN 20
+#define MAX_REVIEWER_LEN 40
+
 #include "review.h"
 #include "reviewdb.h"
 
@@ -38,21 +42,27 @@ using namespace std;
 void submitReview(ReviewDB & db)
 {
     Review r;
-    string Reviewer, Food, Restaurant;
+    char Reviewer[MAX_REVIEWER_LEN], Food[MAX_FOOD_LEN], Restaurant[MAX_RESTAURANT_LEN];
     double Cost;
     int Rating;
+
+    cin.ignore();
     cout << "Enter the name of the restaurant: \n";
-    cin >> Restaurant;
+    cin.getline(Restaurant, MAX_RESTAURANT_LEN);
     r.setRestaurant(Restaurant);
+
     cout << "Enter the name of the food: \n";
-    cin >> Food;
+    cin.getline(Food, MAX_FOOD_LEN);
     r.setFood(Food);
+
     cout << "Enter the name of the reviewer: \n";
-    cin >> Reviewer;
+    cin.getline(Reviewer, MAX_REVIEWER_LEN);
     r.setReviewer(Reviewer);
+
     cout << "Enter the cost of the food: \n";
     cin >> Cost;
     r.setCost(Cost);
+
     cout << "Enter the rating of the food: \n";
     cin >> Rating;
     while (Rating > 10 || Rating < 1)
@@ -66,17 +76,19 @@ void submitReview(ReviewDB & db)
 
 void viewReviewsRestaurant(ReviewDB & db)
 {
-    string Restaurant;
+    cin.ignore();
+    char Restaurant[MAX_RESTAURANT_LEN];
     cout << "Enter the name of the restaurant: \n";
-    cin >> Restaurant;
+    cin.getline(Restaurant, MAX_RESTAURANT_LEN);
     db.printRestaurant(Restaurant);
 }
 
 void viewReviewsCategory(ReviewDB & db)
 {
-    string Food;
+    cin.ignore();
+    char Food[MAX_FOOD_LEN];
     cout << "Enter the name of the food: \n";
-    cin >> Food;
+    cin.getline(Food, MAX_FOOD_LEN);
     db.printCategory(Food);
 }
 
@@ -132,4 +144,6 @@ int main()
     {
         showInterface(cont, db);
     }
+
+    return 0;
 }
