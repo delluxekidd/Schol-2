@@ -11,7 +11,7 @@
 using namespace std;
 
 //----------------------------------------------
-typedef float DataType;
+template <class DataType>
 class Numbers
 {
 public:
@@ -21,7 +21,7 @@ public:
 
    // Methods
     void readFile(string filename);
-    int getCount();
+    DataType getCount();
     DataType getValue(int index);
     DataType findMin();
     DataType findMax();

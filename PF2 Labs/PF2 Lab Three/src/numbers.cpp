@@ -6,7 +6,8 @@
 #include "numbers.h"
 
 //----------------------------------------------
-Numbers::Numbers()
+template <class DataType>
+Numbers<DataType>::Numbers()
 {
    // Initialize variables
    Count = 0;
@@ -15,12 +16,14 @@ Numbers::Numbers()
 }
 
 //----------------------------------------------
-Numbers::~Numbers()
+template <class DataType>
+Numbers<DataType>::~Numbers()
 {
 }
 
 //----------------------------------------------
-void Numbers::readFile(string filename)
+template <class DataType>
+void Numbers<DataType>::readFile(string filename)
 {
    // Open input file
    ifstream din;
@@ -41,13 +44,15 @@ void Numbers::readFile(string filename)
 }
 
 //----------------------------------------------
-int Numbers::getCount()
+template <class DataType>
+DataType Numbers<DataType>::getCount()
 {
    return Count;
 }
 
 //----------------------------------------------
-DataType Numbers::getValue(int index)
+template <class DataType>
+DataType Numbers<DataType>::getValue(int index)
 {
    // Return specified value
    if ((index >= 0) && (index < Count))
@@ -57,7 +62,8 @@ DataType Numbers::getValue(int index)
 }
 
 //----------------------------------------------
-DataType Numbers::findMin()
+template <class DataType>
+DataType Numbers<DataType>::findMin()
 {
    // Search array for min
    int min = Data[0];
@@ -68,7 +74,8 @@ DataType Numbers::findMin()
 }
 
 //----------------------------------------------
-DataType Numbers::findMax()
+template <class DataType>
+DataType Numbers<DataType>::findMax()
 {
    // Search array for max
    int max = Data[0];
@@ -79,7 +86,8 @@ DataType Numbers::findMax()
 }
 
 //----------------------------------------------
-DataType Numbers::findMean()
+template <class DataType>
+DataType Numbers<DataType>::findMean()
 {
    // Calculate mean value of array
    int total = 0;
@@ -91,7 +99,8 @@ DataType Numbers::findMean()
       return 0;
 }
 
-DataType Numbers::findVariance()
+template <class DataType>
+DataType Numbers<DataType>::findVariance()
 {
    // Calculate variance of array
    int mean = findMean();
@@ -104,8 +113,8 @@ DataType Numbers::findVariance()
       return 0;
 }
 
-
-DataType Numbers::findStandardDeviation()
+template <class DataType>
+DataType Numbers<DataType>::findStandardDeviation()
 {
    // Calculate standard deviation of array
    int variance = findVariance();
