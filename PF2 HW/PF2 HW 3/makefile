@@ -1,5 +1,5 @@
 # File to make
-TARGET_EXEC ?= pf2_hw_two
+TARGET_EXEC ?= pf2_hw_one
 
 # Compilers
 AS=as
