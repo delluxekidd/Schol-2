@@ -9,7 +9,7 @@
 int main()
 {
    // Test default constructor
-   Student john;
+   StudentNode john;
    cout << "\nprinting john object\n";
    john.print();
 
@@ -21,17 +21,17 @@ int main()
    john.print();
 
    // Test constructor with parameters
-   Student fred("Fred", "Fayetteville, AR", 4.0);
+   StudentNode fred("Fred", "Fayetteville, AR", 4.0);
    cout << "\nprinting fred object\n";
    fred.print();
 
    // Test copy constructor
-   Student bob(fred);
+   StudentNode bob(fred);
    cout << "\nprinting bob object\n";
    fred.print();
 
    // Testing array of objects
-   Student list[10];
+   StudentNode list[10];
    for (int i = 0; i < 3; i++)
    {
       cout << "\nprinting object " << i << "\n";

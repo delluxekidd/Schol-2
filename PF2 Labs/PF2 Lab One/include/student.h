@@ -8,14 +8,14 @@
 #include <iostream>
 using namespace std;
 
-class Student
+class StudentNode
 {
 public:
    // Constructors
-    Student();
-    Student(string name, string address, float gpa);
-    Student(const Student & student);
-    ~Student();
+    StudentNode();
+    StudentNode(string name, string address, float gpa);
+    StudentNode(const StudentNode & student);
+    ~StudentNode();
 
    // Methods
     string getName() const;
