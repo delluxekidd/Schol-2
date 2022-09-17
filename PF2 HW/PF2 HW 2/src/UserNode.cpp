@@ -86,6 +86,7 @@ UserNode* UserNode::getNext() const
 
 void UserNode::print() const
 {
+    cout << "Printing" << endl;
     cout << "First Name: " << firstName << endl;
     cout << "Last Name: " << lastName << endl;
     cout << "Username: " << username << endl;

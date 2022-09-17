@@ -25,7 +25,7 @@ public:
     void addUser(UserNode* user);
     void incrementCount(string username);
     void largestCount();
-    void print() const;
+    void print();
 
 private:
     UserNode* head;

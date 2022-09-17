@@ -1,6 +1,7 @@
 #include "UserNode.h"
 #include "UserList.h"
 
+
 //Default constructor
 UserList::UserList()
 {
@@ -13,9 +14,10 @@ UserList::UserList()
 
 UserList::~UserList()
 {
+    cout << "Deleting list" << endl;
     //delete all nodes from the linked list
     UserNode* temp = head;
-    while (temp)
+    while (temp != NULL)
     {
         head = head->getNext();
         delete temp;
@@ -27,6 +29,7 @@ UserList::~UserList()
 
 void UserList::addUser(UserNode* user)
 {
+    cout << "Adding user" << endl;
     if (head == NULL)
     {
         head = user;
@@ -47,8 +50,9 @@ void UserList::addUser(UserNode* user)
 
 void UserList::incrementCount(string username)
 {
+    cout << "Incrementing count" << endl;
     UserNode* temp = head;
-    while (temp)
+    while (temp != NULL)
     {
         if (temp->getUsername() == username)
         {
@@ -59,14 +63,38 @@ void UserList::incrementCount(string username)
     }
 }
 
+//LargestCount - search the linked list for the user with the largest message count and and print information for that user
+
+void UserList::largestCount()
+{
+    cout << "Finding largest count" << endl;
+    UserNode* temp = head;
+    UserNode* largest = head;
+    while (temp != NULL)
+    {
+        if (temp->getMessageCount() > largest->getMessageCount())
+        {
+            largest = temp;
+        }
+        temp = temp->getNext();
+    }
+    cout << "User with largest message count: \n";
+    largest->print();
+    cout << endl;
+}
+
 //Print - print information about all users in the list
 
-void UserList::print() const
+void UserList::print()
 {
+    cout << "Printing list" << endl;
     UserNode* temp = head;
-    while (temp)
+    while (temp != NULL)
     {
         temp->print();
         temp = temp->getNext();
+        cout << endl;
     }
+    cout << "Total number of users: " << numUsers << endl;
+    cout << "Total number of messages: " << totalMessages << endl;
 }
