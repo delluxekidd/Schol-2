@@ -1,1 +1,0 @@
-    UserNode* getNext() const;

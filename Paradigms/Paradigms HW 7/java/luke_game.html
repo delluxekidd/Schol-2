@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Assignment 7</title>
+	<meta charset="UTF-8">
+</head>
+
+<body>
+	<br>
+	<canvas id="gameCanvas" width="500" height="500" style="border:1px solid #cccccc;"></canvas>
+
+	<script type="text/javascript">
+		class Sprite {
+			constructor(x1, y1, image_url) {
+				this.x = x1;
+				this.y = y1;
+				this.image = new Image();
+				this.image.src = image_url;
+
+				// Get width and height of image
+				this.image.onload = () => {
+					this.h = this.image.height;
+					this.w = this.image.width;
+				};
+			}
+
+			static fromJSON(json) {
+				var s;
+
+				if (json.type == "Mario") {
+					s = new Mario(json.x, json.y);
+				} else if (json.type == "Goomba") {
+					s = new Goomba(json.x, json.y);
+				} else if (json.type == "Pipe") {
+					s = new Pipe(json.x, json.y);
+				}
+
+				return s;
+			}
+
+			static colliding(s1, s2) {
+				return s1.x < s2.x + s2.w && s1.x + s1.w > s2.x && s1.y < s2.y + s2.h && s1.y + s1.h > s2.y;
+			}
+
+			colliding(other) {
+				return Sprite.colliding(this, other);
+			}
+		}
+
+		class Mario extends Sprite {
+			constructor(x, y) {
+				super(x, y, "mario1.png");
+
+				this.images = [];
+				this.images.push((() => {
+					let image = new Image();
+					image.src = "mario1.png";
+					return image;
+				})());
+				this.images.push((() => {
+					let image = new Image();
+					image.src = "mario2.png";
+					return image;
+				})());
+				this.images.push((() => {
+					let image = new Image();
+					image.src = "mario3.png";
+					return image;
+				})());
+				this.images.push((() => {
+					let image = new Image();
+					image.src = "mario4.png";
+					return image;
+				})());
+				this.images.push((() => {
+					let image = new Image();
+					image.src = "mario5.png";
+					return image;
+				})());
+
+				this.velocityY = 0;
+				this.state = 0;
+				this.framesSinceGrounded = 0;
+			}
+
+			update() {
+				if (this.y >= (450 - this.h)) {
+					this.velocityY = 0.0;
+					this.y = 450 - this.h; // snap back to the ground
+					this.framesSinceGrounded = 0;
+				} else {
+					this.velocityY += 1.2;
+					this.y += parseInt(this.velocityY, 10);
+				}
+			}
+
+			updateState() {
+				this.state = this.state >= 4 ? 0 : (this.state + 1);
+				this.image = this.images[this.state];
+			}
+		}
+
+		class Pipe extends Sprite {
+			constructor(x, y) {
+				super(x, y, "pipe.png");
+			}
+
+			update() { }
+		}
+
+		class Goomba extends Sprite {
+			constructor(x, y) {
+				super(x, y, "goomba.png");
+
+				this.onFire = false;
+				this.goLeft = false;
+				this.velocityY = 0.0;
+				this.gravity = 5.0;
+				this.framesOnFire = 0;
+
+				this.fireImage = new Image();
+				this.fireImage.src = "goomba_fire.png";
+			}
+
+			update() {
+				if (!this.onFire)
+					this.x += 3 * (this.goLeft ? -1 : 1);
+				else {
+					this.framesOnFire++;
+					this.image = this.fireImage;
+				}
+
+				// Affected by gravity
+				this.velocityY += this.gravity;
+				this.y += this.velocityY;
+				if (this.y > 450 - this.h) {
+					this.y = 450 - this.h;
+					this.velocityY = 0;
+					this.gravity = 0;
+				}
+			}
+		}
+
+		class Fireball extends Sprite {
+			constructor(x, y) {
+				super(x, y, "fireball.png");
+
+				this.velocityY = 0.0;
+			}
+
+			update() {
+				// Bounce around
+				this.velocityY += 5.0;
+				this.y += this.velocityY;
+				if (this.y > 480 - this.h) {
+					this.y = 480 - this.h;
+					this.velocityY = -this.velocityY;
+				} else if (this.y < 0) {
+					this.y = 0;
+					this.velocityY = -this.velocityY;
+				}
+
+				// Keep moving right
+				this.x += 10;
+			}
+		}
+
+		class Model {
+			constructor() {
+				this.sprites = [];
+
+				// Have to do this because of CORS
+				var mapData = '[{"x":-361,"y":78,"type":"Pipe"},{"x":361,"y":319,"type":"Pipe"},{"x":421,"y":405,"type":"Goomba"},{"x":475,"y":341,"type":"Pipe"},{"x":543,"y":245,"type":"Pipe"},{"x":608,"y":405,"type":"Goomba"},{"x":691,"y":320,"type":"Pipe"},{"x":771,"y":405,"type":"Goomba"},{"x":849,"y":252,"type":"Pipe"}]'
+
+				// Parse the JSON string into an array of objects
+				mapData = JSON.parse(mapData);
+
+				// Create a sprite for each object in the array
+				for (var i = 0; i < mapData.length; i++) {
+					var s = Sprite.fromJSON(mapData[i]);
+					this.sprites.push(s);
+				}
+
+				// Add Mario
+				this.mario = new Mario(20, 350);
+				this.sprites.push(this.mario);
+			}
+
+			update() {
+				var toRemoveIndices = [];
+
+				for (let i = 0; i < this.sprites.length; i++) {
+					// If sprite is a goomba, check if it is colliding with a pipe
+					if (this.sprites[i] instanceof Goomba) {
+						for (let j = 0; j < this.sprites.length; j++) {
+							if (this.sprites[j] instanceof Pipe) {
+								if (this.sprites[i].colliding(this.sprites[j])) {
+									this.sprites[i].goLeft = !this.sprites[i].goLeft;
+								}
+							}
+						}
+
+						// If goomba is on fire for 5 frames, remove it
+						if (this.sprites[i].onFire && this.sprites[i].framesOnFire >= 5) {
+							toRemoveIndices.push(i);
+						}
+					}
+
+					// If sprite is a fireball, check if it is colliding with a goomba
+					if (this.sprites[i] instanceof Fireball) {
+						for (let j = 0; j < this.sprites.length; j++) {
+							if (this.sprites[j] instanceof Goomba) {
+								if (this.sprites[i].colliding(this.sprites[j])) {
+									// i is a fireball, j is a goomba
+									this.sprites[j].onFire = true;
+									toRemoveIndices.push(i);
+								}
+							}
+						}
+					}
+
+					this.sprites[i].update();
+				}
+
+				// Remove sprites queued for removal
+				for (let i = 0; i < toRemoveIndices.length; i++) {
+					this.sprites.splice(toRemoveIndices[i], 1);
+				}
+			}
+
+			onclick(x, y) {
+				for (let i = 0; i < this.sprites.length; i++) {
+					this.sprites[i].onclick(x, y);
+				}
+			}
+
+			move() {
+				this.mario.move();
+			}
+		}
+
+		class View {
+			constructor(model) {
+				this.model = model;
+				this.canvas = document.getElementById("gameCanvas");
+				this.scrollPos = 0;
+			}
+
+			update() {
+				// Get the 2D context
+				let ctx = this.canvas.getContext("2d");
+				ctx.clearRect(0, 0, 500, 500);
+
+				// Draw sky
+				ctx.fillStyle = "#87CEEB";
+				ctx.fillRect(0, 0, 500, 500);
+
+				// Draw all sprites
+				for (let i = 0; i < this.model.sprites.length; i++) {
+					let s = this.model.sprites[i];
+					if (s.x + s.w < this.scrollPos)
+						continue;
+
+					if (s.x > this.scrollPos + ctx.width)
+						continue;
+
+					ctx.drawImage(s.image, s.x - this.scrollPos, s.y);
+				}
+
+				// Draw ground (brown)
+				ctx.fillStyle = "#8B4513";
+				ctx.fillRect(0, 450, 500, 50);
+			}
+		}
+
+		class Controller {
+			constructor(model, view) {
+				this.model = model;
+				this.view = view;
+				this.keyRight = false;
+				this.keyLeft = false;
+				this.keySpace = false;
+				let self = this;
+
+				// Add event listeners
+				document.addEventListener('keydown', function (event) { self.keyDown(event); }, false);
+				document.addEventListener('keyup', function (event) { self.keyUp(event); }, false);
+			}
+
+			keyDown(event) {
+				if (event.keyCode == 39) this.keyRight = true;
+				else if (event.keyCode == 37) this.keyLeft = true;
+				else if (event.keyCode == 32)
+					if (this.model.mario.framesSinceGrounded == 0)
+						this.keySpace = true;
+			}
+
+			keyUp(event) {
+				if (event.keyCode == 39) this.keyRight = false;
+				else if (event.keyCode == 37) this.keyLeft = false;
+				else if (event.keyCode == 32) this.keySpace = false;
+				else if (event.keyCode == 17)
+					// Shoot fireball
+					this.model.sprites.push(new Fireball(this.model.mario.x, this.model.mario.y));
+			}
+
+			fixMarioPipeCollision() {
+				// Check if Mario is colliding with a pipe
+				for (let i = 0; i < this.model.sprites.length; i++) {
+					if (this.model.sprites[i] instanceof Pipe) {
+						let s = this.model.sprites[i];
+						if (this.model.mario.x + this.model.mario.w >= s.x && this.model.mario.x <= s.x + s.w) {
+							if (this.model.mario.y + this.model.mario.h >= s.y && this.model.mario.y <= s.y + s.h) {
+								// Check if mario is colliding with a pipe in left or right directions
+								if (this.model.mario.x + this.model.mario.w - 5 <= s.x) {
+									this.model.mario.x = s.x - this.model.mario.w;
+								} else if (this.model.mario.x + 5 >= s.x + s.w) {
+									this.model.mario.x = s.x + s.w;
+								}
+
+								// Check if mario is colliding with a pipe vertically
+								if (this.model.mario.y + this.model.mario.h - this.model.mario.velocityY <= s.y) {
+									this.model.mario.y = s.y - this.model.mario.h;
+									this.model.mario.velocityY = 0;
+									this.model.mario.framesSinceGrounded = 0;
+								} else if (this.model.mario.y + this.model.mario.velocityY >= s.y + s.h) {
+									this.model.mario.y = s.y + s.h;
+									this.model.mario.velocityY = 0;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			update() {
+				var marioPipeColliding = false;
+				for (let i = 0; i < this.model.sprites.length; i++) {
+					if (this.model.sprites[i] instanceof Pipe) {
+						marioPipeColliding = this.model.mario.colliding(this.model.sprites[i]);
+					}
+				}
+
+				// Move right
+				if (this.keyRight) {
+					if (!this.marioPipeColliding)
+						this.view.scrollPos += 5;
+					// Move Mario right
+					if (!this.model.editorMode) {
+						this.model.mario.x += 5;
+						this.model.mario.updateState();
+					}
+				}
+				// Move left
+				if (this.keyLeft) {
+					if (!this.marioPipeColliding)
+						this.view.scrollPos -= 5;
+					// Move Mario left
+					if (!this.model.editorMode) {
+						this.model.mario.x -= 5;
+						this.model.mario.updateState();
+					}
+				}
+				// Jump
+				if (this.keySpace && this.model.mario.framesSinceGrounded >= 0 && this.model.mario.framesSinceGrounded < 5) {
+					// Start jumping if Mario is on the ground. Jump higher the longer the user
+					// holds the space bar (up to 5 frames).
+					if (this.model.mario.framesSinceGrounded == 0) {
+						this.model.mario.velocityY = -5.0;
+					} else {
+						this.model.mario.velocityY -= 5.0;
+					}
+					this.model.mario.y += this.model.mario.velocityY;
+					this.model.mario.framesSinceGrounded++;
+				}
+
+				this.fixMarioPipeCollision();
+			}
+		}
+
+		class Game {
+			constructor() {
+				// Create the game elements
+				this.model = new Model();
+				this.view = new View(this.model);
+				this.controller = new Controller(this.model, this.view);
+			}
+
+			onTimer() {
+				// The game loop
+				this.controller.update();
+				this.model.update();
+				this.view.update();
+			}
+		}
+
+		// Create the game
+		let game = new Game();
+		// Run at 25 frames per second
+		let timer = setInterval(function () { game.onTimer(); }, 40);
+
+	</script>
+
+</body>
+
+</html>

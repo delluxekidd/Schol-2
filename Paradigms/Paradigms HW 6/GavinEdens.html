@@ -1,0 +1,121 @@
+<head>
+    <title>Gavin Edens's Page</title>
+
+</head>
+
+<body>
+    <div>
+        <h1>Gavin Edens's Page</h1>
+        <!-- Change the background to a color -->
+        <body style="background-color:rgb(240, 78, 24);">
+        <p>This is a simple webpage that contains a quiz about engine parts.<br>The link below leads to a website where you can read about all of the common engine parts.</p>
+        <!-- Link to another webpage that when clicked opens the webpage in another tab -->
+        <br>
+        <a href="https://studentlesson.com/common-parts-of-a-car-engine/" target="_blank">Click here to learn about the things in this quiz</a>
+        <br>
+    </div>
+
+    <div>
+        <h2>Question 1</h2>
+        <p>Which of these two picture is a crankshaft?</p>
+
+        <img src="crankshaft.webp" onclick="toggleFeedbackQ1('Correct')" alt="Crankshaft" width="250" height="166">
+        <img src="camshaft.jpg" onclick="toggleFeedbackQ1('Wrong')" alt="Camshaft" width="250" height="166">
+        <p id = feedbackQ1> </p>
+    </div>
+
+    <div>
+        <h2>Question 2</h2>
+        <p>What is this a picture of?</p>
+
+        <img src="valve.jpg" alt="Valve" width="250" height="166">
+        <br>
+        <br>
+        <input type = "button" onclick = "toggleFeedbackQ2('Correct')" value = "Valve">
+        <input type = "button" onclick = "toggleFeedbackQ2('Piston')" value = "Piston and Rod">
+        <input type = "button" onclick = "toggleFeedbackQ2('Push')" value = "Push Rod">
+        <p id = feedbackQ2> </p>
+    </div>
+
+    <div>
+        <h2>Question 3</h2>
+        <p>What is pictured below?</p>
+
+        <!-- <img src="https://media.istockphoto.com/id/1058090886/photo/car-wheel.jpg?s=612x612&w=0&k=20&c=zgjPEdDk7jScrZTCjyyYhKPwAqFwewJhqMuh2VjMQa8=" onclick="toggleFeedbackQ3('Wrong')" alt="Wheel" width="250" height="166">
+        <img src="https://media.istockphoto.com/id/1463399042/photo/car-engine-flywheel.jpg?s=612x612&w=0&k=20&c=F47v1UcIRkGQno8p94BaK6s_D_vlhZIF__OD7bCPd_U=" onclick="toggleFeedbackQ3('Correct')" alt="Flywheel" width="250" height="166"> -->
+        <img src="flywheel.jpg" alt="Valve" width="250" height="166">
+        <br>
+        <br>
+        <input type = "button" onclick = "toggleFeedbackQ3('Correct')" value = "Flywheel">
+        <input type = "button" onclick = "toggleFeedbackQ3('Wheel')" value = "Frisbee">
+        <input type = "button" onclick = "toggleFeedbackQ3('Circle')" value = "Big Circle">
+        <p id = feedbackQ3> </p>
+    </div>
+
+    <div>
+        <br>
+        <input type = "button" onclick = "reset()" value = "Reset">
+        <br>
+    </div>
+
+
+
+<script type="text/javascript">
+    function reset()
+    {
+        initQuiz();
+    }
+
+    function toggleFeedbackQ1(str)
+    {
+        if (str == "Correct")
+        {
+            document.getElementById("feedbackQ1").innerHTML = "Correct, this is a picture of a crankshaft! It is responsible for transferring the kinetic energy of the piston to the transmission.";
+        }
+        else
+        {
+            document.getElementById("feedbackQ1").innerHTML = "Sorry, but this is actually a Camshaft, the camshaft is responsible for actuating the valves to modulate the flow of exhaust gases and air intake.";
+        }
+    }
+
+    function toggleFeedbackQ2(str)
+    {
+        if (str == "Correct")
+        {
+            document.getElementById("feedbackQ2").innerHTML = "Correct, this is a picture of an engine valve! It is responsible for sealing the exhaust and intake ports to and from the cylinders.";
+        }
+        else if (str == "Piston")
+        {
+            document.getElementById("feedbackQ2").innerHTML = "Sorry, but a Piston and rod assembly would be much larger.";
+        }
+        else if (str == "Push")
+        {
+            document.getElementById("feedbackQ2").innerHTML = "Sorry, but a pushrod would be a completely uniform cylinder.";
+        }
+    }
+
+    function toggleFeedbackQ3(str)
+    {
+        if (str == "Correct")
+        {
+            document.getElementById("feedbackQ3").innerHTML = "Correct, this is a picture of a flywheel! It is responsible for storing rotational energy to facilitate continued ignition and smoothing out the engine's power output.";
+        }
+        else if (str == "Wheel")
+        {
+            document.getElementById("feedbackQ3").innerHTML = "I mean, you'd have to throw it real hard but it could be.";
+        }
+        else if (str == "Circle")
+        {
+            document.getElementById("feedbackQ3").innerHTML = "Umm, have you ever seen a car before?";
+        }
+    }
+
+    //Initialize the quiz
+    function initQuiz()
+    {
+        document.getElementById("feedbackQ1").innerHTML = "";
+        document.getElementById("feedbackQ2").innerHTML = "";
+        document.getElementById("feedbackQ3").innerHTML = "";
+    }
+</script>
+</body>

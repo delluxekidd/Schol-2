@@ -1,0 +1,735 @@
+<!--create the html section of the code-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>A7 - Javascript</title>
+        <meta charset="utf-8">
+    </head>
+
+    <body>
+        <canvas id="board" width="1000" height="1000"></canvas>
+    </body>
+
+    <script>
+
+        class Sprite
+        {
+            constructor()
+            {
+            }
+
+            draw()
+            {
+                ctx.drawImage(this.image, this.x, this.y);
+            }
+
+            static unmarshall(ob)
+            {
+                var ob2;
+
+                if (ob.type == "tile")
+                {
+					ob2 = new Tile(ob.x, ob.y);
+				}
+
+                else if (ob.type == "pot")
+                {
+					ob2 = new Pot(ob.x, ob.y);
+				}
+
+				return ob2;
+            }
+        }
+
+        class Boomerang extends Sprite
+        {
+            constructor(x, y, direction)
+            {
+                super();
+                this.x = x;
+                this.y = y;
+                this.dir = direction;
+                this.w = 36;
+                this.h = 36;
+                this.index = 0;
+                this.boomerangImages = [];
+                this.boomerangImages.push((() => {let image = new Image(); image.src = "images/boomerang1.png"; return image;})());
+                this.boomerangImages.push((() => {let image = new Image(); image.src = "images/boomerang2.png"; return image;})());
+                this.boomerangImages.push((() => {let image = new Image(); image.src = "images/boomerang3.png"; return image;})());
+                this.boomerangImages.push((() => {let image = new Image(); image.src = "images/boomerang4.png"; return image;})());
+            }
+
+            isLink()
+            {
+                return false;
+            }
+
+            isTile()
+            {
+                return false;
+            }
+
+            isBoomerang()
+            {
+                return true;
+            }
+
+            isPot()
+            {
+                return false;
+            }
+
+            moveRight()
+            {
+                this.x += 15;
+                this.index++;
+                if (this.index > 3)
+                {
+                    this.index = 0;
+                }
+            }
+
+            moveLeft()
+            {
+                this.x -= 15;
+                this.index++;
+                if (this.index > 3)
+                {
+                    this.index = 0;
+                }
+            }
+
+            moveUp()
+            {
+                this.y -= 15;
+                this.index++;
+                if (this.index > 3)
+                {
+                    this.index = 0;
+                }
+            }
+
+            moveDown()
+            {
+                this.y += 15;
+                this.index++;
+                if (this.index > 3)
+                {
+                    this.index = 0;
+                }
+            }
+
+            update()
+            {
+                this.right = this.x + this.w;
+                this.left = this.x;
+                this.top = this.y;
+                this.bottom = this.y + this.h;
+                if (this.dir == 0)
+                {
+                    this.moveDown();
+                }
+                else if (this.dir == 1)
+                {
+                    this.moveLeft();
+                }
+                else if (this.dir == 2)
+                {
+                    this.moveRight();
+                }
+                else if (this.dir == 3)
+                {
+                    this.moveUp();
+                }
+            }
+
+            paintComponent(g, vX, vY)
+            {
+                g.drawImage(this.boomerangImages[this.index], this.x - vX, this.y - vY, this.w, this.h);
+            }
+
+            toString()
+            {
+                return "Boomerang (x,y) = (" + this.x + ", " + this.y + "), w = " + this.w + ", h = " + this.h + ", right = " + this.right + ", left = " + this.left + ", top = " + this.top + ", bottom = " + this.bottom;
+            }
+        }
+
+        class Link extends Sprite
+        {
+            constructor()
+            {
+                super();
+                this.x = 100;
+                this.y = 100;
+                this.w = 73;
+                this.h = 85;
+                this.dir = 0;
+                this.index = 0;
+                this.link_images = [];
+
+                for (let i = 1; i <= 50; i++)
+                {
+                    this.link_images.push((() => {let image = new Image(); image.src = "images/link" + i + ".png"; return image;})());
+                }
+            }
+
+            toString()
+            {
+                return "Link (x,y) = (" + x + ", " + y + "), w = " + w + ", h = " + h + ", right = " + right + ", left = " + left + ", top = " + top + ", bottom = " + bottom + ", pRight = " + pRight + ", pLeft = " + pLeft + ", pTop = " + pTop + ", pBottom = " + pBottom;
+            }
+
+            move(dir)
+            {
+                if (dir == 0)
+                {
+                    if (this.index > 10)
+                    {
+                        this.index = 0;
+                    }
+                }
+                else if (dir == 1)
+                {
+                    if (this.index > 24 || this.index < 14)
+                    {
+                        this.index = 14;
+                    }
+                }
+                else if (dir == 2)
+                {
+                    if (this.index > 37 || this.index < 27)
+                    {
+                        this.index = 27;
+                    }
+                }
+                else if (dir == 3)
+                {
+                    if (this.index > 49 || this.index < 39)
+                    {
+                        this.index = 40;
+                    }
+                }
+            }
+
+            moveUp()
+            {
+                this.y = this.y - 10;
+                this.index++;
+                this.dir = 3;
+                this.move(3);
+            }
+
+            moveDown()
+            {
+                this.y = this.y + 10;
+                this.index++;
+                this.dir = 0;
+                this.move(0);
+            }
+
+            moveLeft()
+            {
+                this.x = this.x - 10
+                this.index++;
+                this.dir = 1;
+                this.move(1);
+            }
+
+            moveRight()
+            {
+                this.x = this.x + 10
+                this.index++;
+                this.dir = 2;
+                this.move(2);
+            }
+
+
+            paintComponent(g, vX, vY)
+            {
+                g.drawImage(this.link_images[this.index], this.x - vX, this.y - vY, this.w, this.h);
+            }
+
+            update()
+            {
+                this.right = this.x + this.w;
+                this.left = this.x;
+                this.top = this.y;
+                this.bottom = this.y + this.h;
+            }
+
+            updatePrev()
+            {
+                this.pRight = this.x + this.w;
+                this.pLeft = this.x;
+                this.pTop = this.y;
+                this.pBottom = this.y + this.h;
+            }
+
+            isLink()
+            {
+                return true;
+            }
+
+            isTile()
+            {
+                return false;
+            }
+
+            isBoomerang()
+            {
+                return false;
+            }
+
+            isPot()
+            {
+                return false;
+            }
+        }
+
+        class Pot extends Sprite
+        {
+            constructor(x, y)
+            {
+                super();
+                this.x = x;
+                this.y = y;
+                this.xDir = 0;
+                this.yDir = 0;
+                this.frames = 0;
+                this.w = 48;
+                this.h = 48;
+                this.isBroken = false;
+                this.potImage = ((() => {let image = new Image(); image.src = "images/pot.png"; return image;})());
+                this.brokenPotImage = ((() => {let image = new Image(); image.src = "images/pot_broken.png"; return image;})());
+            }
+
+            isLink()
+            {
+                return false;
+            }
+
+            isTile()
+            {
+                return false;
+            }
+
+            isBoomerang()
+            {
+                return false;
+            }
+
+            isPot()
+            {
+                return true;
+            }
+
+            breakPot()
+            {
+                this.isBroken = true;
+                this.yDir = 0;
+                this.xDir = 0;
+            }
+
+            collided(dir)
+            {
+                console.log(dir);
+                if (dir == 0)
+                {
+                    this.yDir = 10;
+                }
+                if (dir == 1)
+                {
+                    this.xDir = -10;
+                }
+                if (dir == 2)
+                {
+                    this.xDir = 10;
+                }
+                if (dir == 3)
+                {
+                    this.yDir = -10;
+                }
+            }
+
+            update()
+            {
+                if (this.isBroken == true)
+                {
+                    this.yDir = 0;
+                    this.xDir = 0;
+                }
+                this.x += this.xDir;
+                this.y += this.yDir;
+                this.right = this.x + this.w;
+                this.left = this.x;
+                this.top = this.y;
+                this.bottom = this.y + this.h;
+                if (this.isBroken)
+                {
+                    this.frames = this.frames + 1;
+                }
+            }
+
+            removePot()
+            {
+                console.log(this.frames);
+                return this.frames > 200;
+            }
+
+            paintComponent(g, vX, vY)
+            {
+                if (this.isBroken == true)
+                    g.drawImage(this.brokenPotImage, this.x - vX, this.y - vY);
+                else
+                    g.drawImage(this.potImage, this.x - vX, this.y - vY);
+            }
+
+            toString()
+            {
+                return "Pot (x,y) = (" + this.x + ", " + this.y + "), w = " + this.w + ", h = " + this.h + ", right = " + this.right + ", left = " + this.left + ", top = " + this.top + ", bottom = " + this.bottom;
+            }
+        }
+
+        class Tile extends Sprite
+        {
+            constructor(x, y)
+            {
+                super();
+                this.x = x;
+                this.y = y;
+                this.w = 50;
+                this.h = 50;
+                this.right = this.x + this.w;
+                this.left = this.x;
+                this.top = this.y;
+                this.bottom = this.y + this.h;
+                if (this.tileImage == null)
+                {
+                    this.tileImage = this.loadTileImage();
+                }
+            }
+            loadTileImage()
+            {
+                return ((() => {let image = new Image(); image.src = "images/tile.png"; return image;})());
+            }
+
+            isTile()
+            {
+                return true;
+            }
+
+            isLink()
+            {
+                return false;
+            }
+
+            isBoomerang()
+            {
+                return false;
+            }
+
+            isPot()
+            {
+                return false;
+            }
+
+            paintComponent(g, vX, vY)
+            {
+                g.drawImage(this.tileImage, this.x - vX, this.y - vY);
+            }
+
+            toString()
+            {
+                return "Tile (x,y) = (" + x + ", " + y + "), w = " + w + ", h = " + h + ", right = " + right + ", left = " + left + ", top = " + top + ", bottom = " + bottom;
+            }
+
+            update()
+            {
+            }
+        }
+
+        class Controller
+        {
+
+            constructor(m, v)
+            {
+                this.model = m;
+                this.view = v;
+                let self = this;
+
+                //key listeners
+                document.addEventListener('keydown', function (event) { self.keyPressed(event); }, false);
+				document.addEventListener('keyup', function (event) { self.keyReleased(event); }, false);
+            }
+
+            keyPressed(e)
+            {
+                if(e.keyCode == 39){this.keyRight = true;}
+                else if(e.keyCode == 37){ this.keyLeft = true;}
+                else if(e.keyCode == 38){this.keyUp = true;}
+                else if(e.keyCode == 40){ this.keyDown = true;}
+            }
+
+            keyReleased(e)
+            {
+                if (e.keyCode == 39) this.keyRight = false;
+                else if (e.keyCode == 37) this.keyLeft = false;
+                else if (e.keyCode == 38) this.keyUp = false;
+                else if (e.keyCode == 40) this.keyDown = false;
+                else if (e.keyCode == 17) this.model.shoot();
+            }
+
+            update()
+            {
+                this.model.link.updatePrev();
+
+                if (this.model.link.x > 1000)
+                {
+                    this.view.moveright();
+                }
+                if (this.model.link.x < 1000)
+                {
+                    this.view.moveleft();
+                }
+                if (this.model.link.y > 1000)
+                {
+                    this.view.movedown();
+                }
+                if (this.model.link.y < 1000)
+                {
+                    this.view.moveup();
+                }
+                if (this.keyRight == true)
+                {
+                    this.model.link.moveRight();
+                }
+                else if (this.keyLeft == true)
+                {
+                    this.model.link.moveLeft();
+                }
+                else if (this.keyUp == true)
+                {
+                    this.model.link.moveUp();
+                }
+                else if (this.keyDown == true)
+                {
+                    this.model.link.moveDown();
+                }
+            }
+        }
+
+        class View
+        {
+            constructor(m)
+            {
+                this.model = m;
+                this.canvas = document.getElementById("board");
+                this.x_pos = 0;
+                this.y_pos = 0;
+            }
+
+            paintComponent(g)
+            {
+                let ctx = this.canvas.getContext("2d");
+				ctx.clearRect(0, 0, 1000, 1000);
+				//fill with black
+                ctx.fillStyle = 'black';
+				ctx.fillRect(0, 0, 1000, 1000);
+                for (let i = 0; i < this.model.sprites.length; i++)
+                {
+                    this.model.sprites[i].paintComponent(ctx, this.x_pos, this.y_pos);
+                }
+            }
+
+            moveup()
+            {
+                this.y_pos = 0;
+            }
+
+            movedown()
+            {
+                this.y_pos = 1000;
+            }
+
+            moveleft()
+            {
+                this.x_pos = 0;
+            }
+
+            moveright()
+            {
+                this.x_pos = 1000;
+            }
+
+            toString()
+            {
+                return "View (x,y) = (" + this.x_pos + ", " + this.y_pos + ")";
+            }
+        }
+
+        class Model
+        {
+            constructor()
+            {
+                var map = '[{"type":"tile","x":0,"y":0},{"type":"tile","x":50,"y":0},{"type":"tile","x":0,"y":50},{"type":"tile","x":0,"y":100},{"type":"tile","x":0,"y":150},{"type":"tile","x":0,"y":200},{"type":"tile","x":0,"y":250},{"type":"tile","x":0,"y":300},{"type":"tile","x":0,"y":350},{"type":"tile","x":0,"y":400},{"type":"tile","x":0,"y":450},{"type":"tile","x":0,"y":500},{"type":"tile","x":0,"y":550},{"type":"tile","x":0,"y":600},{"type":"tile","x":0,"y":650},{"type":"tile","x":0,"y":700},{"type":"tile","x":0,"y":750},{"type":"tile","x":0,"y":800},{"type":"tile","x":0,"y":850},{"type":"tile","x":0,"y":900},{"type":"tile","x":50,"y":900},{"type":"tile","x":100,"y":900},{"type":"tile","x":150,"y":900},{"type":"tile","x":250,"y":900},{"type":"tile","x":200,"y":900},{"type":"tile","x":300,"y":900},{"type":"tile","x":350,"y":900},{"type":"tile","x":600,"y":900},{"type":"tile","x":650,"y":900},{"type":"tile","x":700,"y":900},{"type":"tile","x":750,"y":900},{"type":"tile","x":800,"y":900},{"type":"tile","x":850,"y":900},{"type":"tile","x":900,"y":900},{"type":"tile","x":950,"y":900},{"type":"tile","x":950,"y":850},{"type":"tile","x":950,"y":800},{"type":"tile","x":950,"y":750},{"type":"tile","x":950,"y":700},{"type":"tile","x":950,"y":650},{"type":"tile","x":950,"y":600},{"type":"tile","x":950,"y":550},{"type":"tile","x":950,"y":350},{"type":"tile","x":950,"y":300},{"type":"tile","x":950,"y":250},{"type":"tile","x":950,"y":200},{"type":"tile","x":950,"y":0},{"type":"tile","x":900,"y":0},{"type":"tile","x":850,"y":0},{"type":"tile","x":800,"y":0},{"type":"tile","x":750,"y":0},{"type":"tile","x":700,"y":0},{"type":"tile","x":650,"y":0},{"type":"tile","x":600,"y":0},{"type":"tile","x":100,"y":0},{"type":"tile","x":150,"y":0},{"type":"tile","x":200,"y":0},{"type":"tile","x":250,"y":0},{"type":"tile","x":300,"y":0},{"type":"tile","x":350,"y":0},{"type":"tile","x":1000,"y":900},{"type":"tile","x":1000,"y":850},{"type":"tile","x":1000,"y":750},{"type":"tile","x":1000,"y":800},{"type":"tile","x":1050,"y":900},{"type":"tile","x":1100,"y":900},{"type":"tile","x":1150,"y":900},{"type":"tile","x":1200,"y":900},{"type":"tile","x":1250,"y":900},{"type":"tile","x":1300,"y":900},{"type":"tile","x":1350,"y":900},{"type":"tile","x":1950,"y":900},{"type":"tile","x":1900,"y":900},{"type":"tile","x":1850,"y":900},{"type":"tile","x":1800,"y":900},{"type":"tile","x":1750,"y":900},{"type":"tile","x":1700,"y":900},{"type":"tile","x":1650,"y":900},{"type":"tile","x":1600,"y":900},{"type":"tile","x":1000,"y":700},{"type":"tile","x":1000,"y":650},{"type":"tile","x":1950,"y":850},{"type":"tile","x":1950,"y":800},{"type":"tile","x":1950,"y":750},{"type":"tile","x":1950,"y":700},{"type":"tile","x":1950,"y":650},{"type":"tile","x":1950,"y":600},{"type":"tile","x":1950,"y":550},{"type":"tile","x":1950,"y":0},{"type":"tile","x":1950,"y":50},{"type":"tile","x":1950,"y":100},{"type":"tile","x":1950,"y":150},{"type":"tile","x":1950,"y":200},{"type":"tile","x":1950,"y":250},{"type":"tile","x":1950,"y":300},{"type":"tile","x":1950,"y":350},{"type":"tile","x":1000,"y":600},{"type":"tile","x":1000,"y":550},{"type":"tile","x":1000,"y":400},{"type":"tile","x":1000,"y":450},{"type":"tile","x":1000,"y":500},{"type":"tile","x":1000,"y":350},{"type":"tile","x":1000,"y":300},{"type":"tile","x":1000,"y":250},{"type":"tile","x":1000,"y":200},{"type":"tile","x":1000,"y":0},{"type":"tile","x":1050,"y":0},{"type":"tile","x":1100,"y":0},{"type":"tile","x":1150,"y":0},{"type":"tile","x":1200,"y":0},{"type":"tile","x":1250,"y":0},{"type":"tile","x":1300,"y":0},{"type":"tile","x":1350,"y":0},{"type":"tile","x":1600,"y":0},{"type":"tile","x":1650,"y":0},{"type":"tile","x":1700,"y":0},{"type":"tile","x":1750,"y":0},{"type":"tile","x":1800,"y":0},{"type":"tile","x":1850,"y":0},{"type":"tile","x":1900,"y":0},{"type":"tile","x":1000,"y":1000},{"type":"tile","x":1000,"y":1200},{"type":"tile","x":1000,"y":1250},{"type":"tile","x":1000,"y":1300},{"type":"tile","x":1000,"y":1350},{"type":"tile","x":1000,"y":1900},{"type":"tile","x":1000,"y":1850},{"type":"tile","x":1000,"y":1800},{"type":"tile","x":1000,"y":1750},{"type":"tile","x":1000,"y":1550},{"type":"tile","x":1050,"y":1900},{"type":"tile","x":1100,"y":1900},{"type":"tile","x":1150,"y":1900},{"type":"tile","x":1200,"y":1900},{"type":"tile","x":1250,"y":1900},{"type":"tile","x":1300,"y":1900},{"type":"tile","x":1350,"y":1900},{"type":"tile","x":1950,"y":1900},{"type":"tile","x":1900,"y":1900},{"type":"tile","x":1850,"y":1900},{"type":"tile","x":1800,"y":1900},{"type":"tile","x":1750,"y":1900},{"type":"tile","x":1700,"y":1900},{"type":"tile","x":1650,"y":1900},{"type":"tile","x":1600,"y":1900},{"type":"tile","x":1950,"y":1850},{"type":"tile","x":1950,"y":1800},{"type":"tile","x":1950,"y":1750},{"type":"tile","x":1950,"y":1700},{"type":"tile","x":1950,"y":1650},{"type":"tile","x":1950,"y":1550},{"type":"tile","x":1950,"y":1600},{"type":"tile","x":1950,"y":1500},{"type":"tile","x":1950,"y":1400},{"type":"tile","x":1950,"y":1450},{"type":"tile","x":1950,"y":1350},{"type":"tile","x":1950,"y":1300},{"type":"tile","x":1950,"y":1250},{"type":"tile","x":1950,"y":1200},{"type":"tile","x":1950,"y":1150},{"type":"tile","x":1950,"y":1100},{"type":"tile","x":1950,"y":1050},{"type":"tile","x":1950,"y":1000},{"type":"tile","x":1900,"y":1000},{"type":"tile","x":1850,"y":1000},{"type":"tile","x":1800,"y":1000},{"type":"tile","x":1750,"y":1000},{"type":"tile","x":1700,"y":1000},{"type":"tile","x":1650,"y":1000},{"type":"tile","x":1300,"y":1000},{"type":"tile","x":1250,"y":1000},{"type":"tile","x":1150,"y":1000},{"type":"tile","x":1100,"y":1000},{"type":"tile","x":1050,"y":1000},{"type":"tile","x":1200,"y":1000},{"type":"tile","x":950,"y":1000},{"type":"tile","x":900,"y":1000},{"type":"tile","x":850,"y":1000},{"type":"tile","x":800,"y":1000},{"type":"tile","x":750,"y":1000},{"type":"tile","x":700,"y":1000},{"type":"tile","x":650,"y":1000},{"type":"tile","x":600,"y":1000},{"type":"tile","x":0,"y":1000},{"type":"tile","x":50,"y":1000},{"type":"tile","x":100,"y":1000},{"type":"tile","x":150,"y":1000},{"type":"tile","x":200,"y":1000},{"type":"tile","x":300,"y":1000},{"type":"tile","x":250,"y":1000},{"type":"tile","x":0,"y":1050},{"type":"tile","x":0,"y":1100},{"type":"tile","x":0,"y":1150},{"type":"tile","x":0,"y":1200},{"type":"tile","x":0,"y":1250},{"type":"tile","x":0,"y":1300},{"type":"tile","x":0,"y":1350},{"type":"tile","x":0,"y":1900},{"type":"tile","x":0,"y":1850},{"type":"tile","x":0,"y":1800},{"type":"tile","x":0,"y":1750},{"type":"tile","x":0,"y":1700},{"type":"tile","x":0,"y":1650},{"type":"tile","x":0,"y":1600},{"type":"tile","x":0,"y":1550},{"type":"tile","x":50,"y":1900},{"type":"tile","x":100,"y":1900},{"type":"tile","x":300,"y":1900},{"type":"tile","x":200,"y":1900},{"type":"tile","x":150,"y":1900},{"type":"tile","x":250,"y":1900},{"type":"tile","x":350,"y":1900},{"type":"tile","x":600,"y":1900},{"type":"tile","x":650,"y":1900},{"type":"tile","x":700,"y":1900},{"type":"tile","x":750,"y":1900},{"type":"tile","x":800,"y":1900},{"type":"tile","x":850,"y":1900},{"type":"tile","x":900,"y":1900},{"type":"tile","x":950,"y":1900},{"type":"tile","x":950,"y":1850},{"type":"tile","x":950,"y":1200},{"type":"tile","x":950,"y":1250},{"type":"tile","x":950,"y":1300},{"type":"tile","x":950,"y":1350},{"type":"tile","x":950,"y":1450},{"type":"tile","x":950,"y":1400},{"type":"tile","x":950,"y":1500},{"type":"tile","x":950,"y":1550},{"type":"tile","x":950,"y":1750},{"type":"tile","x":950,"y":1800},{"type":"tile","x":250,"y":250},{"type":"tile","x":250,"y":300},{"type":"tile","x":250,"y":350},{"type":"tile","x":250,"y":400},{"type":"tile","x":250,"y":450},{"type":"tile","x":250,"y":500},{"type":"tile","x":250,"y":550},{"type":"tile","x":250,"y":600},{"type":"tile","x":250,"y":650},{"type":"tile","x":300,"y":450},{"type":"tile","x":350,"y":450},{"type":"tile","x":400,"y":450},{"type":"tile","x":400,"y":400},{"type":"tile","x":400,"y":350},{"type":"tile","x":400,"y":250},{"type":"tile","x":400,"y":300},{"type":"tile","x":400,"y":500},{"type":"tile","x":400,"y":550},{"type":"tile","x":400,"y":600},{"type":"tile","x":400,"y":650},{"type":"tile","x":700,"y":650},{"type":"tile","x":700,"y":500},{"type":"tile","x":700,"y":450},{"type":"tile","x":700,"y":350},{"type":"tile","x":700,"y":400},{"type":"tile","x":700,"y":300},{"type":"tile","x":700,"y":250},{"type":"tile","x":550,"y":250},{"type":"tile","x":550,"y":300},{"type":"tile","x":550,"y":350},{"type":"tile","x":550,"y":400},{"type":"tile","x":550,"y":450},{"type":"tile","x":550,"y":500},{"type":"tile","x":550,"y":550},{"type":"tile","x":550,"y":600},{"type":"tile","x":550,"y":650},{"type":"tile","x":500,"y":250},{"type":"tile","x":600,"y":250},{"type":"tile","x":500,"y":650},{"type":"tile","x":600,"y":650},{"type":"tile","x":1250,"y":700},{"type":"tile","x":1200,"y":700},{"type":"tile","x":1150,"y":700},{"type":"tile","x":1300,"y":700},{"type":"tile","x":1350,"y":700},{"type":"tile","x":1400,"y":700},{"type":"tile","x":1450,"y":700},{"type":"tile","x":1500,"y":700},{"type":"tile","x":1550,"y":700},{"type":"tile","x":1600,"y":700},{"type":"tile","x":1650,"y":700},{"type":"tile","x":1800,"y":600},{"type":"tile","x":1800,"y":650},{"type":"tile","x":1800,"y":700},{"type":"tile","x":1800,"y":750},{"type":"tile","x":1700,"y":450},{"type":"tile","x":1650,"y":450},{"type":"tile","x":1600,"y":450},{"type":"tile","x":1550,"y":450},{"type":"tile","x":1500,"y":450},{"type":"tile","x":1450,"y":450},{"type":"tile","x":1400,"y":450},{"type":"tile","x":1350,"y":450},{"type":"tile","x":1250,"y":450},{"type":"tile","x":1300,"y":450},{"type":"tile","x":1200,"y":450},{"type":"tile","x":1150,"y":450},{"type":"tile","x":1150,"y":50},{"type":"tile","x":1150,"y":100},{"type":"tile","x":1150,"y":150},{"type":"tile","x":1150,"y":200},{"type":"tile","x":1150,"y":250},{"type":"tile","x":1200,"y":250},{"type":"tile","x":1250,"y":250},{"type":"tile","x":1300,"y":250},{"type":"tile","x":1350,"y":250},{"type":"tile","x":1400,"y":250},{"type":"tile","x":1450,"y":250},{"type":"tile","x":1500,"y":250},{"type":"tile","x":1550,"y":250},{"type":"tile","x":1600,"y":250},{"type":"tile","x":350,"y":1300},{"type":"tile","x":350,"y":1350},{"type":"tile","x":350,"y":1400},{"type":"tile","x":300,"y":1600},{"type":"tile","x":350,"y":1650},{"type":"tile","x":400,"y":1650},{"type":"tile","x":450,"y":1650},{"type":"tile","x":500,"y":1650},{"type":"tile","x":550,"y":1650},{"type":"tile","x":600,"y":1650},{"type":"tile","x":650,"y":1600},{"type":"tile","x":600,"y":1400},{"type":"tile","x":600,"y":1350},{"type":"tile","x":600,"y":1300},{"type":"tile","x":1400,"y":1400},{"type":"tile","x":1450,"y":1450},{"type":"tile","x":1500,"y":1500},{"type":"tile","x":1550,"y":1550},{"type":"tile","x":1550,"y":1400},{"type":"tile","x":1500,"y":1450},{"type":"tile","x":1450,"y":1500},{"type":"tile","x":1400,"y":1550},{"type":"tile","x":700,"y":550},{"type":"tile","x":950,"y":400},{"type":"tile","x":950,"y":450},{"type":"tile","x":950,"y":500},{"type":"tile","x":0,"y":1400},{"type":"tile","x":0,"y":1450},{"type":"tile","x":0,"y":1500},{"type":"tile","x":1000,"y":1400},{"type":"tile","x":1000,"y":1450},{"type":"tile","x":1000,"y":1500},{"type":"tile","x":1950,"y":400},{"type":"tile","x":1950,"y":450},{"type":"tile","x":1950,"y":500},{"type":"tile","x":400,"y":0},{"type":"tile","x":450,"y":0},{"type":"tile","x":500,"y":0},{"type":"tile","x":550,"y":0},{"type":"tile","x":350,"y":1000},{"type":"tile","x":400,"y":1900},{"type":"tile","x":450,"y":1900},{"type":"tile","x":550,"y":1900},{"type":"tile","x":500,"y":1900},{"type":"tile","x":1400,"y":0},{"type":"tile","x":1450,"y":0},{"type":"tile","x":1500,"y":0},{"type":"tile","x":1550,"y":0},{"type":"tile","x":1400,"y":1900},{"type":"tile","x":1450,"y":1900},{"type":"tile","x":1500,"y":1900},{"type":"tile","x":1550,"y":1900},{"type":"tile","x":1350,"y":1000},{"type":"tile","x":1600,"y":1000},{"type":"tile","x":1350,"y":850},{"type":"tile","x":1350,"y":750},{"type":"tile","x":1350,"y":800},{"type":"tile","x":1800,"y":550},{"type":"tile","x":1800,"y":500},{"type":"tile","x":1750,"y":450},{"type":"tile","x":1800,"y":450},{"type":"tile","x":1800,"y":400},{"type":"tile","x":1800,"y":350},{"type":"tile","x":1800,"y":300},{"type":"tile","x":1800,"y":250},{"type":"tile","x":1400,"y":1350},{"type":"tile","x":1350,"y":1350},{"type":"tile","x":1350,"y":1400},{"type":"tile","x":1550,"y":1350},{"type":"tile","x":1600,"y":1350},{"type":"tile","x":1600,"y":1400},{"type":"tile","x":1550,"y":1600},{"type":"tile","x":1600,"y":1600},{"type":"tile","x":1600,"y":1550},{"type":"tile","x":1350,"y":1550},{"type":"tile","x":1350,"y":1600},{"type":"tile","x":1400,"y":1600},{"type":"tile","x":1450,"y":1300},{"type":"tile","x":1500,"y":1300},{"type":"tile","x":1500,"y":1250},{"type":"tile","x":1450,"y":1250},{"type":"tile","x":1300,"y":1250},{"type":"tile","x":1250,"y":1250},{"type":"tile","x":1250,"y":1300},{"type":"tile","x":1300,"y":1300},{"type":"tile","x":1300,"y":1450},{"type":"tile","x":1250,"y":1450},{"type":"tile","x":1250,"y":1500},{"type":"tile","x":1300,"y":1500},{"type":"tile","x":1300,"y":1650},{"type":"tile","x":1250,"y":1650},{"type":"tile","x":1250,"y":1700},{"type":"tile","x":1300,"y":1700},{"type":"tile","x":1450,"y":1650},{"type":"tile","x":1500,"y":1650},{"type":"tile","x":1500,"y":1700},{"type":"tile","x":1450,"y":1700},{"type":"tile","x":1650,"y":1650},{"type":"tile","x":1650,"y":1700},{"type":"tile","x":1700,"y":1700},{"type":"tile","x":1700,"y":1650},{"type":"tile","x":1650,"y":1500},{"type":"tile","x":1700,"y":1500},{"type":"tile","x":1700,"y":1450},{"type":"tile","x":1650,"y":1450},{"type":"tile","x":1650,"y":1300},{"type":"tile","x":1700,"y":1300},{"type":"tile","x":1700,"y":1250},{"type":"tile","x":1650,"y":1250},{"type":"tile","x":1350,"y":1200},{"type":"tile","x":1400,"y":1200},{"type":"tile","x":1400,"y":1150},{"type":"tile","x":1350,"y":1150},{"type":"tile","x":1550,"y":1150},{"type":"tile","x":1550,"y":1200},{"type":"tile","x":1600,"y":1200},{"type":"tile","x":1600,"y":1150},{"type":"tile","x":1750,"y":1600},{"type":"tile","x":1800,"y":1600},{"type":"tile","x":1800,"y":1550},{"type":"tile","x":1750,"y":1550},{"type":"tile","x":1750,"y":1400},{"type":"tile","x":1800,"y":1400},{"type":"tile","x":1800,"y":1350},{"type":"tile","x":1750,"y":1350},{"type":"tile","x":1750,"y":1200},{"type":"tile","x":1800,"y":1200},{"type":"tile","x":1800,"y":1150},{"type":"tile","x":1750,"y":1150},{"type":"tile","x":1200,"y":1150},{"type":"tile","x":1150,"y":1150},{"type":"tile","x":1150,"y":1200},{"type":"tile","x":1200,"y":1200},{"type":"tile","x":1200,"y":1350},{"type":"tile","x":1150,"y":1350},{"type":"tile","x":1150,"y":1400},{"type":"tile","x":1200,"y":1400},{"type":"tile","x":1200,"y":1550},{"type":"tile","x":1150,"y":1550},{"type":"tile","x":1150,"y":1600},{"type":"tile","x":1200,"y":1600},{"type":"tile","x":3650,"y":700},{"type":"tile","x":3650,"y":700},{"type":"tile","x":3650,"y":700},{"type":"tile","x":3650,"y":700},{"type":"tile","x":3650,"y":700},{"type":"pot","x":1263,"y":201},{"type":"pot","x":1370,"y":139},{"type":"pot","x":1284,"y":96},{"type":"pot","x":1237,"y":172},{"type":"pot","x":1239,"y":794},{"type":"pot","x":1296,"y":804},{"type":"pot","x":1196,"y":839},{"type":"pot","x":1590,"y":1296},{"type":"pot","x":1682,"y":1379},{"type":"pot","x":1785,"y":1474},{"type":"pot","x":1757,"y":1457},{"type":"pot","x":1774,"y":1668},{"type":"pot","x":1242,"y":1814},{"type":"pot","x":1294,"y":1818},{"type":"pot","x":1374,"y":1822},{"type":"pot","x":1445,"y":1822},{"type":"pot","x":1590,"y":1831},{"type":"pot","x":1272,"y":1397},{"type":"tile","x":0,"y":950},{"type":"tile","x":50,"y":950},{"type":"tile","x":100,"y":950},{"type":"tile","x":150,"y":950},{"type":"tile","x":200,"y":950},{"type":"tile","x":250,"y":950},{"type":"tile","x":300,"y":950},{"type":"tile","x":350,"y":950},{"type":"tile","x":600,"y":950},{"type":"tile","x":650,"y":950},{"type":"tile","x":700,"y":950},{"type":"tile","x":750,"y":950},{"type":"tile","x":800,"y":950},{"type":"tile","x":850,"y":950},{"type":"tile","x":900,"y":950},{"type":"tile","x":950,"y":950},{"type":"tile","x":0,"y":1950},{"type":"tile","x":50,"y":1950},{"type":"tile","x":100,"y":1950},{"type":"tile","x":150,"y":1950},{"type":"tile","x":200,"y":1950},{"type":"tile","x":250,"y":1950},{"type":"tile","x":300,"y":1950},{"type":"tile","x":350,"y":1950},{"type":"tile","x":400,"y":1950},{"type":"tile","x":450,"y":1950},{"type":"tile","x":500,"y":1950},{"type":"tile","x":550,"y":1950},{"type":"tile","x":600,"y":1950},{"type":"tile","x":650,"y":1950},{"type":"tile","x":700,"y":1950},{"type":"tile","x":750,"y":1950},{"type":"tile","x":800,"y":1950},{"type":"tile","x":850,"y":1950},{"type":"tile","x":900,"y":1950},{"type":"tile","x":950,"y":1950},{"type":"tile","x":1000,"y":1950},{"type":"tile","x":1050,"y":1950},{"type":"tile","x":1100,"y":1950},{"type":"tile","x":1150,"y":1950},{"type":"tile","x":1200,"y":1950},{"type":"tile","x":1250,"y":1950},{"type":"tile","x":1300,"y":1950},{"type":"tile","x":1350,"y":1950},{"type":"tile","x":1400,"y":1950},{"type":"tile","x":1450,"y":1950},{"type":"tile","x":1500,"y":1950},{"type":"tile","x":1550,"y":1950},{"type":"tile","x":1600,"y":1950},{"type":"tile","x":1650,"y":1950},{"type":"tile","x":1700,"y":1950},{"type":"tile","x":1750,"y":1950},{"type":"tile","x":1800,"y":1950},{"type":"tile","x":1850,"y":1950},{"type":"tile","x":1900,"y":1950},{"type":"tile","x":1950,"y":1950},{"type":"tile","x":1000,"y":950},{"type":"tile","x":1050,"y":950},{"type":"tile","x":1100,"y":950},{"type":"tile","x":1150,"y":950},{"type":"tile","x":1200,"y":950},{"type":"tile","x":1300,"y":950},{"type":"tile","x":1250,"y":950},{"type":"tile","x":1350,"y":950},{"type":"tile","x":1600,"y":950},{"type":"tile","x":1650,"y":950},{"type":"tile","x":1700,"y":950},{"type":"tile","x":1750,"y":950},{"type":"tile","x":1800,"y":950},{"type":"tile","x":1850,"y":950},{"type":"tile","x":1900,"y":950},{"type":"tile","x":1950,"y":950}]'
+                map = JSON.parse(map);
+                this.sprites = [];
+                this.spritesToBeRemoved = [];
+                for (var i = 0; i < map.length; i++) {
+					var t = Sprite.unmarshall(map[i]);
+					this.sprites.push(t);
+				}
+                this.link = new Link();
+                this.sprites.push(this.link);
+            }
+
+            collision(a, b, i, j)
+            {
+                if (a.right > b.left && a.left < b.right  && a.bottom > b.top && a.top < b.bottom)
+                {
+                    if (a instanceof Link && b instanceof Tile)
+                    {
+                        this.snapToTile(b);
+                    }
+
+                    if (a instanceof Tile && b instanceof Link)
+                    {
+                        this.snapToTile(a);
+                    }
+
+                    if (a instanceof Boomerang)
+                    {
+                        if (b instanceof Tile)
+                        {
+                            this.spritesToBeRemoved.push(i);
+                        }
+                        else if (b instanceof Pot)
+                        {
+                            this.spritesToBeRemoved.push(i);
+                            b.breakPot();
+                        }
+                    }
+
+                    if (b instanceof Boomerang)
+                    {
+                        if (a instanceof Tile)
+                        {
+                            this.spritesToBeRemoved.push(j);
+                        }
+                        if (a instanceof Pot)
+                        {
+                            this.spritesToBeRemoved.push(j);
+                            a.breakPot();
+                        }
+                    }
+
+                    if (a instanceof Pot)
+                    {
+                        if (b instanceof Tile)
+                        {
+                            a.breakPot();
+                        }
+
+                        if (b instanceof Link)
+                        {
+                            a.collided(this.link.dir);
+                        }
+                    }
+
+                    if (b instanceof Pot)
+                    {
+                        if (a instanceof Tile)
+                        {
+                            b.breakPot();
+                        }
+
+                        if (a instanceof Link)
+                        {
+                            b.collided(this.link.dir);
+                        }
+                    }
+
+                }
+                return false;
+            }
+
+            snapToTile(t)
+            {
+                if (this.link.right > t.left && this.link.pRight <= t.left && this.link.right < t.right)
+                {
+                    this.link.x = t.left - this.link.w;
+                }
+
+                if (this.link.left < t.right && this.link.pLeft >= t.right && this.link.left > t.left)
+                {
+                    this.link.x = t.right;
+                }
+
+                if (this.link.bottom > t.top && this.link.pBottom <= t.top && this.link.bottom < t.bottom)
+                {
+                    this.link.y = t.top - this.link.h;
+                }
+
+                if (this.link.top < t.bottom && this.link.pTop >= t.bottom && this.link.top > t.top)
+                {
+                    this.link.y = t.bottom;
+                }
+            }
+
+            shoot()
+            {
+                var s = new Boomerang(this.link.x + 20, this.link.y + 20, this.link.dir);
+                this.sprites.push(s);
+            }
+
+            update()
+            {
+                for (var i = 0; i < this.sprites.length; i++)
+                {
+                    var t = this.sprites[i];
+                    t.update();
+                    if (t instanceof Pot)
+                    {
+                        if (t.removePot() == true)
+                        {
+                            this.spritesToBeRemoved.push(i);
+                        }
+                    }
+                    for (var j = 0; j < this.sprites.length; j++)
+                    {
+                        var s = this.sprites[j];
+                        this.collision(t, s, i, j);
+                    }
+                }
+
+                for (var i = 0; i < this.spritesToBeRemoved.length; i++)
+                {
+                    this.sprites.splice(this.spritesToBeRemoved[i], 1);
+                }
+
+                this.spritesToBeRemoved = [];
+            }
+        }
+
+        class Game
+        {
+            constructor()
+            {
+                this.model = new Model();
+                this.view = new View(this.model);
+                this.controller = new Controller(this.model, this.view);
+            }
+
+            update()
+            {
+                this.model.update();
+                this.view.paintComponent();
+                this.controller.update();
+            }
+        }
+
+		let game = new Game();
+		let timer = setInterval(function () { game.update(); }, 40);
+
+    </script>
+</html>
