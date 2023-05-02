@@ -25,11 +25,11 @@ public class Pot extends Sprite
         isBroken = false;
         if (potImage == null)
         {
-            potImage = View.loadImage("images/pot.png");
+            potImage = View.loadImage(filename);
         }
         if (brokenPotImage == null)
         {
-            brokenPotImage = View.loadImage("images/pot_broken.png");
+            brokenPotImage = View.loadImage(brokenFilename);
         }
     }
 
@@ -46,11 +46,11 @@ public class Pot extends Sprite
         isBroken = false;
         if (potImage == null)
         {
-            potImage = View.loadImage("images/pot.png");
+            potImage = View.loadImage(filename);
         }
         if (brokenPotImage == null)
         {
-            brokenPotImage = View.loadImage("images/pot_broken.png");
+            brokenPotImage = View.loadImage(brokenFilename);
         }
     }
 
@@ -103,8 +103,11 @@ public class Pot extends Sprite
 
     public void update()
     {
-        x += xDir;
-        y += yDir;
+        if (!isBroken)
+        {
+            x += xDir;
+            y += yDir;
+        }
         right = x + w;
         left = x;
         top = y;
@@ -136,38 +139,6 @@ public class Pot extends Sprite
         ob.add("y", y);
         return ob;
     }
-
-    // public void startMoving(int dir)
-    // {
-    //     if (dir == 0)
-    //     {
-    //         while(isBroken)
-    //         {
-    //             y += 10;
-    //         }
-    //     }
-    //     if (dir == 1)
-    //     {
-    //         while(isBroken)
-    //         {
-    //             x -= 10;
-    //         }
-    //     }
-    //     if (dir == 2)
-    //     {
-    //         while(isBroken)
-    //         {
-    //             x += 10;
-    //         }
-    //     }
-    //     if (dir == 3)
-    //     {
-    //         while(isBroken)
-    //         {
-    //             y -= 10;
-    //         }
-    //     }
-    // }
 
     @Override
     public String toString()
