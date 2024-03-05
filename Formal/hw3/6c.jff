@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--Created with JFLAP 7.1.--><structure>
+	<type>fa</type>
+	<automaton>
+		<!--The list of states.-->
+		<state id="3" name="accept">
+			<x>422.0</x>
+			<y>155.0</y>
+			<final/>
+		</state>
+		<state id="4" name="start">
+			<x>50.0</x>
+			<y>156.0</y>
+		</state>
+		<!--The list of transitions.-->
+		<transition>
+			<from>4</from>
+			<to>3</to>
+			<read>b*aa*b(a+b)*</read>
+		</transition>
+	</automaton>
+</structure>

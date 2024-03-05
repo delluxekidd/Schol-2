@@ -1,0 +1,640 @@
+Script started on 2024-02-19 23:25:50-0600
+]0;gcedens@turing: ~/DB/hw2[01;32mgcedens@turing[00m:[01;34m~/DB/hw2[00m$ ls -lt
+total 28
+-rw-r----- 1 gcedens gcedens     0 Feb 19 23:25 typescript
+-rwx------ 1 gcedens gcedens 15707 Feb 19 23:25 [0m[01;32mDatabase.py[0m
+-rwx------ 1 gcedens gcedens   469 Feb 19 22:52 [01;32mSmallTitanic.csv[0m
+-rwx------ 1 gcedens gcedens  5012 Feb 19 22:52 [01;32mTestDB.py[0m
+]0;gcedens@turing: ~/DB/hw2[01;32mgcedens@turing[00m:[01;34m~/DB/hw2[00m$ python3 TestDB.py 
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 1
+Enter the name of the csv file (exclude .csv): Samll    mallTitanic
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 4
+Enter the desired passenger ID: 100
+Could not find record with ID 100
+Record not found.
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 2
+What database would you like to open? SmallTut  itanic
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 4
+Enter the desired passenger ID: 2
+Passenger ID: 2
+First Name: Cumings
+Last Name: John Bradley
+Age: 38
+Ticket Number: PC 17599
+Fare: 71.3
+Date of Purchase: 1/11/1912
+
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 4
+Enter the desired passenger ID: 3
+Passenger ID: 3
+First Name: Heikkinen
+Last Name: Laina
+Age: 26
+Ticket Number: STON/O2. 3101282
+Fare: 7.9
+Date of Purchase: 1/22/1912
+
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 4
+Enter the desired passenger ID: 16
+Passenger ID: 16
+First Name: Hewlett
+Last Name: Mary
+Age: 55
+Ticket Number: 248706
+Fare: 16
+Date of Purchase: 1/20/1912
+
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 4
+Enter the desired passenger ID: 20
+Passenger ID: 20
+First Name: Masselmani
+Last Name: Fatima
+Age: 55
+Ticket Number: 2649
+Fare: 7.2
+Date of Purchase: 2/20/1912
+
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 4
+Enter the desired passenger ID: -1
+Could not find record with ID -1
+Record not found.
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 5
+What passenger would you like to update?: 2
+Enter the new value for size_last_name (Leave blank for no change): 
+Enter the new value for size_first_name (Leave blank for no change): 
+Enter the new value for size_age (Leave blank for no change): 34
+Enter the new value for size_ticket_number (Leave blank for no change): 
+Enter the new value for size_fare (Leave blank for no change): 
+Enter the new value for size_date_of_purchase (Leave blank for no change): 
+Record updated.
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 4
+Enter the desired passenger ID: 2
+Passenger ID: 2
+First Name: Cumings
+Last Name: John Bradley
+Age: 34
+Ticket Number: PC 17599
+Fare: 71.3
+Date of Purchase: 1/11/1912
+
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 5
+What passenger would you like to update?: 3
+Enter the new value for size_last_name (Leave blank for no change): 
+Enter the new value for size_first_name (Leave blank for no change): 
+Enter the new value for size_age (Leave blank for no change): 
+Enter the new value for size_ticket_number (Leave blank for no change): 
+Enter the new value for size_fare (Leave blank for no change): 
+Enter the new value for size_date_of_purchase (Leave blank for no change): 
+Record updated.
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 4
+Enter the desired passenger ID: 3
+Passenger ID: 3
+First Name: Heikkinen
+Last Name: Laina
+Age: 26
+Ticket Number: STON/O2. 3101282
+Fare: 7.9
+Date of Purchase: 1/22/1912
+
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 5
+What passenger would you like to update?: 20
+Enter the new value for size_last_name (Leave blank for no change): 
+Enter the new value for size_first_name (Leave blank for no change): 
+Enter the new value for size_age (Leave blank for no change): 
+Enter the new value for size_ticket_number (Leave blank for no change): 
+Enter the new value for size_fare (Leave blank for no change): 
+Enter the new value for size_date_of_purchase (Leave blank for no change): 1/20/12 912
+Record updated.
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 4
+Enter the desired passenger ID: 20
+Passenger ID: 20
+First Name: Masselmani
+Last Name: Fatima
+Age: 55
+Ticket Number: 2649
+Fare: 7.2
+Date of Purchase: 1/20/1912
+
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 6
+Passenger ID: 2
+First Name: Cumings
+Last Name: John Bradley
+Age: 34
+Ticket Number: PC 17599
+Fare: 71.3
+Date of Purchase: 1/11/1912
+
+Passenger ID: 3
+First Name: Heikkinen
+Last Name: Laina
+Age: 26
+Ticket Number: STON/O2. 3101282
+Fare: 7.9
+Date of Purchase: 1/22/1912
+
+Passenger ID: 4
+First Name: Futrelle
+Last Name: Jacques Heath
+Age: 35
+Ticket Number: 113803
+Fare: 53.1
+Date of Purchase: 3/23/1912
+
+Passenger ID: 9
+First Name: Johnson
+Last Name: Oscar W
+Age: 27
+Ticket Number: 347742
+Fare: 11.1
+Date of Purchase: 3/2/1912
+
+Passenger ID: 10
+First Name: Nasser
+Last Name: Nicholas
+Age: 14
+Ticket Number: 237736
+Fare: 30.1
+Date of Purchase: 2/21/1912
+
+Passenger ID: 11
+First Name: Sandstrom
+Last Name: Marguerite Rut
+Age: 4
+Ticket Number: PP 9549
+Fare: 16.7
+Date of Purchase: 2/20/1912
+
+Passenger ID: 12
+First Name: Bonnell
+Last Name: Elizabeth
+Age: 58
+Ticket Number: 113783
+Fare: 26.6
+Date of Purchase: 1/14/1912
+
+Passenger ID: 16
+First Name: Hewlett
+Last Name: Mary
+Age: 55
+Ticket Number: 248706
+Fare: 16
+Date of Purchase: 1/20/1912
+
+Passenger ID: 18
+First Name: Williams
+Last Name: Charles Eugene
+Age: 55
+Ticket Number: 244373
+Fare: 13
+Date of Purchase: 1/22/1912
+
+Passenger ID: 20
+First Name: Masselmani
+Last Name: Fatima
+Age: 55
+Ticket Number: 2649
+Fare: 7.2
+Date of Purchase: 1/20/1912
+
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 7
+Enter the desired passenger ID: 100
+Enter the new first name: Sam
+Enter the new last name: Gauch
+Enter the new age: 44
+Enter the new ticket number: PA 1012
+Enter the new fare: 43.33
+Enter the new date of purchase: 2/5/1912
+Could not find record with ID.. 100
+Record successfully inserted.
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 4
+Enter the desired passenger ID: 100
+Passenger ID: 100
+First Name: Sam
+Last Name: Gauch
+Age: 44
+Ticket Number: PA 1012
+Fare: 43.33
+Date of Purchase: 2/5/1912
+
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 5
+What passenger would you like to update?: 100
+Enter the new value for size_last_name (Leave blank for no change): 
+Enter the new value for size_first_name (Leave blank for no change): 
+Enter the new value for size_age (Leave blank for no change): 56
+Enter the new value for size_ticket_number (Leave blank for no change): 
+Enter the new value for size_fare (Leave blank for no change): 
+Enter the new value for size_date_of_purchase (Leave blank for no change): 
+Record updated.
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 4
+Enter the desired passenger ID: 100
+Passenger ID: 100
+First Name: Sam
+Last Name: Gauch
+Age: 56
+Ticket Number: PA 1012
+Fare: 43.33
+Date of Purchase: 2/5/1912
+
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 9 3
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 4
+Enter the desired passenger ID: 2
+Could not find record with ID 2
+Record not found.
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Select Record
+
+5. Update Record
+
+6. Create Report
+
+7. Insert Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 9
+]0;gcedens@turing: ~/DB/hw2[01;32mgcedens@turing[00m:[01;34m~/DB/hw2[00m$ cat typescript

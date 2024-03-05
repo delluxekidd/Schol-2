@@ -1,0 +1,56 @@
+Script started on 2024-02-06 21:13:52-0600
+]0;olwells@turing: ~/db_hw1[01;32molwells@turing[00m:[01;34m~/db_hw1[00m$ ls -l
+total 24
+-rwx------ 1 olwells olwells 7145 Feb  6 21:11 [0m[01;32mDatabase.py[0m
+-rwx------ 1 olwells olwells  469 Feb  6 21:11 [01;32mSmallTitanic.csv[0m
+-rwx------ 1 olwells olwells 1464 Feb  6 21:11 [01;32mTestDB.py[0m
+-rwx------ 1 olwells olwells 4700 Feb  6 21:11 [01;32mTitanic.csv[0m
+-rw-r----- 1 olwells olwells    0 Feb  6 21:13 typescript
+]0;olwells@turing: ~/db_hw1[01;32molwells@turing[00m:[01;34m~/db_hw1[00m$ python3 TEs[K[K[Ke[KTestDB.py 
+1. Create New Database
+
+2. Open Database
+
+3. Close Database
+
+4. Display Record
+
+5. Update Record
+
+6. Create Report
+
+7. Add Record
+
+8. Delete Record
+
+9. Quit
+
+Select a menu option: 1
+num_records: 10
+size_records: 78
+size_passenger_id :  8
+size_last_name :  11
+size_first_name :  15
+size_age :  8
+size_ticket_number :  17
+size_fare :  8
+size_date_of_purchase :  10
+['2', 'Cumings', 'John Bradley', '38', 'PC 17599', '71.3', '1/11/1912']
+[]
+['9', 'Johnson', 'Oscar W', '27', '347742', '11.1', '3/2/1912']
+[]
+[]
+]0;olwells@turing: ~/db_hw1[01;32molwells@turing[00m:[01;34m~/db_hw1[00m$ ls -l
+total 36
+-rwx------ 1 olwells olwells 7145 Feb  6 21:11 [0m[01;32mDatabase.py[0m
+drwxr-x--- 2 olwells olwells 4096 Feb  6 21:14 [01;34m__pycache__[0m
+-rw-r----- 1 olwells olwells  150 Feb  6 21:14 SmallTitanic.config
+-rwx------ 1 olwells olwells  469 Feb  6 21:11 [01;32mSmallTitanic.csv[0m
+-rw-r----- 1 olwells olwells 1560 Feb  6 21:14 SmallTitanic.data
+-rwx------ 1 olwells olwells 1464 Feb  6 21:11 [01;32mTestDB.py[0m
+-rwx------ 1 olwells olwells 4700 Feb  6 21:11 [01;32mTitanic.csv[0m
+-rw-r----- 1 olwells olwells    0 Feb  6 21:13 typescript
+]0;olwells@turing: ~/db_hw1[01;32molwells@turing[00m:[01;34m~/db_hw1[00m$ exit
+exit
+
+Script done on 2024-02-06 21:14:16-0600
